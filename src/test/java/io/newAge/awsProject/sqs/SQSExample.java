@@ -8,7 +8,7 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.*;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.SpringApplication;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -16,11 +16,17 @@ import java.util.List;
 @SpringBootTest
 class SQSExample {
 
-    static String ACCESS_KEY = "AKIAUJXBWFL354A23ETK";
-    static String SECRET_KEY = "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";
+    @Value("${cloud.aws.credentials.access-key}")
+    private String ACCESS_KEY;
+    @Value("${cloud.aws.credentials.secret-key}")
+    private String SECRET_KEY;
+
+    @Value("${cloud.aws.end-point.uri}")
+    private String queue;
 
     @Test
     public void SendReceive() {
+
 
 //        Credentials
         AWSCredentials awsCredentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
@@ -29,13 +35,12 @@ class SQSExample {
 
 //        Create Queue
 //        String queueValue = createQueue(sqsClient);
-        String queueValue="https://sqs.us-east-1.amazonaws.com/295752313591/QueueTest3";
 
 //        Send Message
-        sendMessage(sqsClient, queueValue);
+        sendMessage(sqsClient, queue);
 
 //        Receive Message
-        List<String> messages = receiveMessage(sqsClient, queueValue);
+        List<String> messages = receiveMessage(sqsClient, queue);
         messages.forEach(System.out::println);
 
 //        Clear Queue

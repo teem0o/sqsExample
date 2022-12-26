@@ -8,14 +8,16 @@ import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClient;
 import com.amazonaws.services.sqs.model.ListQueuesResult;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static io.newAge.awsProject.sqs.SqsApplication.ACCESS_KEY;
-import static io.newAge.awsProject.sqs.SqsApplication.SECRET_KEY;
 
 @SpringBootTest
 class PrintAllQueues {
-
+	@Value("${cloud.aws.credentials.access-key}")
+	private String ACCESS_KEY;
+	@Value("${cloud.aws.credentials.secret-key}")
+	private String SECRET_KEY;
 	@Test
 	void printQueues() {
 		AWSCredentials awsCredentials = new BasicAWSCredentials(ACCESS_KEY, SECRET_KEY);
