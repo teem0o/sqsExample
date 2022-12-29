@@ -31,7 +31,7 @@ public class SqsController {
         SendMessageRequest sendMessageStandardQueue = new SendMessageRequest()
                 .withQueueUrl(queue)
                 .withMessageBody(message)
-//                .withDelaySeconds(5)
+                .withDelaySeconds(5)
                 .withMessageAttributes(messageAttributes);
 
         amazonSQS.sendMessage(sendMessageStandardQueue);
@@ -45,6 +45,11 @@ public class SqsController {
                 .withMaxNumberOfMessages(10);
 
         List<Message> sqsMessages = amazonSQS.receiveMessage(receiveMessageRequest).getMessages();
+
+        for (Message m : sqsMessages) {
+            amazonSQS.deleteMessage(queue, m.getReceiptHandle());
+        }
+
         return sqsMessages;
     }
     @GetMapping("/purge")

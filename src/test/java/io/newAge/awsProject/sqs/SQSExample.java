@@ -25,7 +25,7 @@ class SQSExample {
     private String queue;
 
     @Test
-    public void SendReceive() {
+    void SendReceive() {
 
 
 //        Credentials
@@ -34,10 +34,11 @@ class SQSExample {
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials)).build();
 
 //        Create Queue
-//        String queueValue = createQueue(sqsClient);
+//        String queue = createQueue(sqsClient);
 
 //        Send Message
-        sendMessage(sqsClient, queue);
+        String message = String.valueOf(System.currentTimeMillis());
+        sendMessage(message,sqsClient, queue);
 
 //        Receive Message
         List<String> messages = receiveMessage(sqsClient, queue);
@@ -55,9 +56,9 @@ class SQSExample {
         return queueResult.getQueueUrl();
     }
 
-    private static void sendMessage(AmazonSQS sqsClient, String queueValue) {
+    private static void sendMessage(String message, AmazonSQS sqsClient, String queueValue) {
         SendMessageRequest request = new SendMessageRequest();
-        String body = "message : " + System.currentTimeMillis();
+        String body = "message : " + message;
         request.setMessageBody(body);
         request.setQueueUrl(queueValue);
         sqsClient.sendMessage(request);
